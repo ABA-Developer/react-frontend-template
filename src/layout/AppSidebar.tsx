@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
-import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons";
+import { ChevronDownIcon, GearIcon, GridIcon, HorizontaLDots } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 
 type NavItem = {
@@ -13,7 +13,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    name: "Dashboard",
+    name: "Main",
     divider: true,
   },
   {
@@ -22,28 +22,28 @@ const navItems: NavItem[] = [
     path: "/",
   },
   {
-    name: "Systems",
+    name: "System",
     divider: true,
   },
   {
-    icon: <GridIcon />,
+    icon: <GearIcon />,
     name: "Pengaturan Sistem",
     subItems: [
       {
         name: "Menu",
-        path: "/menu",
+        path: "/settings/menu",
       },
       {
-        name: "Roles",
-        path: "/roles",
+        name: "Role",
+        path: "/settings/role",
       },
       {
         name: "Akun User",
-        path: "/user-accounts",
+        path: "/settings/user-account",
       },
       {
         name: "Profil Akun",
-        path: "/profile-accounts",
+        path: "/settings/profile",
       },
     ],
   },
@@ -257,28 +257,21 @@ const AppSidebar = () => {
         }`}>
         <Link to='/'>
           {isExpanded || isHovered || isMobileOpen ? (
-            <>
+            <div className="flex flex-row items-center dark:text-white">
               <img
-                className='dark:hidden'
-                src='/images/logo/logo.svg'
+                src='/images/favicon.ico'
                 alt='Logo'
-                width={150}
-                height={40}
+                width={50}
+                height={50}
               />
-              <img
-                className='hidden dark:block'
-                src='/images/logo/logo-dark.svg'
-                alt='Logo'
-                width={150}
-                height={40}
-              />
-            </>
+              Abarobotics Dashboard
+            </div>
           ) : (
             <img
-              src='/images/logo/logo-icon.svg'
+              src='/images/favicon.ico'
               alt='Logo'
-              width={32}
-              height={32}
+              width={50}
+              height={50}
             />
           )}
         </Link>
