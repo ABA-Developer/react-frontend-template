@@ -1,47 +1,54 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from 'react';
+import Button from '../button/Button';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onConfirm: () => void;
   className?: string;
-  children: React.ReactNode;
   showCloseButton?: boolean; // New prop to control close button visibility
+  confirmTitle?: string;
+  confirmButton?: string;
+  cancelButton?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const ConfirmationModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
-  children,
+  onConfirm,
   className,
   showCloseButton = true, // Default to true for backwards compatibility
+  confirmTitle = "Are you sure want to do this action?",
+  confirmButton = "Yes",
+  cancelButton = "No"
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, onClose]);
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
@@ -55,12 +62,14 @@ export const Modal: React.FC<ModalProps> = ({
       ></div>
       <div
         ref={modalRef}
-        className={`relative w-sm md:w-3xl rounded-3xl bg-white  dark:bg-gray-900 px-10 py-10 ${className}`}
+        className={`relative w-sm md:w-lg rounded-3xl bg-white dark:bg-gray-900 px-10 py-10 ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {showCloseButton && (
           <button
-            onClick={() => {onClose()}}
+            onClick={() => {
+              onClose();
+            }}
             className="absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
           >
             <svg
@@ -79,7 +88,29 @@ export const Modal: React.FC<ModalProps> = ({
             </svg>
           </button>
         )}
-        <div>{children}</div>
+        <div className="flex flex-col justify-center items-center">
+          <h2 className="font-bold text-xl pt-5 pb-10 text-black">{confirmTitle}</h2>
+
+          <div className='flex flex-row justify-center items-center gap-3'>
+            <Button
+              className='w-20'
+              onClick={() => {
+                onConfirm();
+              }}
+            >
+              {confirmButton}
+            </Button>
+            <Button
+              className='w-20'
+              onClick={() => {
+                onClose();
+              }}
+              colorScheme='gray'
+            >
+              {cancelButton}
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import PageBreadcrumb from '../../components/common/PageBreadCrumb';
 import Form from '../../components/form/Form';
+import Label from '../../components/form/Label';
+import Input from '../../components/form/input/InputField';
 import Button from '../../components/ui/button/Button';
+import { Modal } from '../../components/ui/modal';
 import {
   Table,
   TableBody,
@@ -8,9 +12,19 @@ import {
   TableHeader,
   TableRow,
 } from '../../components/ui/table';
-import { PlusIcon, TrashBinIcon, UserIcon } from '../../icons';
+import {
+  ChatIcon,
+  LockIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashBinIcon,
+  UserIcon,
+} from '../../icons';
+import Select from '../../components/form/Select';
 
 const UserAccount = () => {
+  const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
+
   return (
     <>
       <PageBreadcrumb pageTitle="Akun User" baseSection="System" />
@@ -48,7 +62,7 @@ const UserAccount = () => {
                 />
               </div>
             </Form>
-            <Button size="sm" variant="outline">
+            <Button size="sm" onClick={() => setIsOpenModalAdd(true)}>
               <PlusIcon /> Tambah data
             </Button>
           </div>
@@ -77,20 +91,21 @@ const UserAccount = () => {
                   Aktif
                 </TableCell>
                 <TableCell>
-                  <Button
-                    size="sm"
-                    onClick={() => {}}
-                    className="bg-warning-500 text-white hover:bg-warning-600"
-                  >
+                  <Button size="sm" onClick={() => {}} colorScheme="success">
                     <UserIcon />
                   </Button>
                 </TableCell>
-                <TableCell>
-                  <Button
-                    size="sm"
-                    onClick={() => {}}
-                    className="bg-red-500 text-white hover:bg-red-600"
-                  >
+                <TableCell className="flex flex-row gap-2">
+                  <Button size="sm" onClick={() => {}} colorScheme="gray">
+                    <ChatIcon />
+                  </Button>
+                  <Button size="sm" onClick={() => {}} colorScheme="blue-light">
+                    <LockIcon />
+                  </Button>
+                  <Button size="sm" onClick={() => {}} colorScheme="warning">
+                    <PencilIcon />
+                  </Button>
+                  <Button size="sm" onClick={() => {}} colorScheme="error">
                     <TrashBinIcon />
                   </Button>
                 </TableCell>
@@ -99,6 +114,93 @@ const UserAccount = () => {
           </Table>
         </div>
       </div>
+
+      {/* Modal add */}
+      <Modal isOpen={isOpenModalAdd} onClose={() => setIsOpenModalAdd(false)}>
+        <h1 className="mb-5 text-2xl font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+          Tambah Akun
+        </h1>
+
+        <Form onSubmit={() => {}}>
+          <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="role_id" required>
+                  Role User
+                </Label>
+                <Select
+                  options={[
+                    {
+                      value: '1',
+                      label: 'Super Admin',
+                    },
+                    {
+                      value: '2',
+                      label: 'Keuangan',
+                    },
+                  ]}
+                  onChange={() => {}}
+                />
+              </div>
+              <div>
+                <Label htmlFor="name" required>
+                  Nama Lengkap
+                </Label>
+                <Input type="text" id="name" />
+              </div>
+              <div>
+                <Label htmlFor="username" required>
+                  Nama Pengguna
+                </Label>
+                <Input type="text" id="username" />
+              </div>
+              <div>
+                <Label htmlFor="email" required>
+                  Email
+                </Label>
+                <Input type="email" id="email" />
+              </div>
+              <div>
+                <Label htmlFor="password" required>
+                  Password
+                </Label>
+                <Input type="password" id="password" />
+              </div>
+              <div>
+                <Label htmlFor="is_active" required>
+                  Aktifkan Akun?
+                </Label>
+                <Select
+                  options={[
+                    {
+                      value: '1',
+                      label: 'Ya',
+                    },
+                    {
+                      value: '0',
+                      label: 'Tidak',
+                    },
+                  ]}
+                  onChange={() => {}}
+                  defaultValue="1"
+                />
+              </div>
+            </div>
+            <div className="flex flex-row w-full justify-end gap-3 mt-5">
+              <Button size="md" colorScheme="success">
+                Submit
+              </Button>
+              <Button
+                size="md"
+                colorScheme="gray"
+                onClick={() => setIsOpenModalAdd(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Form>
+      </Modal>
     </>
   );
 };

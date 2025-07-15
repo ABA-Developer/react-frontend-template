@@ -15,7 +15,8 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import React from 'react';
-import { DraggableIcon } from '../../../icons';
+import { DraggableIcon, PencilIcon, TrashBinIcon, UserCircleIcon } from '../../../icons';
+import Button from '../button/Button';
 // import { motion } from "framer-motion";
 
 type MenuItem = {
@@ -74,13 +75,22 @@ const SortableItem = ({
       ${isChild ? 'ml-6' : ''}
     `}
     >
-      <span className='flex flex-row justify-between w-full items-center text-black dark:text-white'>
-        <div className='flex flex-row items-center gap-1'>
+      <span className="flex flex-row justify-between w-full items-center text-black dark:text-white">
+        <div className="flex flex-row items-center gap-1">
           <DraggableIcon />
           {item.label}{' '}
         </div>
         <span className="text-sm text-gray-400">
-          {isChild ? `Child Order: ${order}` : `Parent Order: ${order}`}
+          {isChild ? `Child Order: ${order}` : `Parent Order: ${order}`} |
+          <Button size="sm" className="ms-1" colorScheme='blue-light'>
+            <UserCircleIcon />
+          </Button>
+          <Button size="sm" className="ms-1" colorScheme='warning'>
+            <PencilIcon />
+          </Button>
+          <Button size="sm" className="ms-1" colorScheme='error'>
+            <TrashBinIcon />
+          </Button>
         </span>
       </span>
     </li>

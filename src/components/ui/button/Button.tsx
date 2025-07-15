@@ -1,47 +1,67 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface ButtonProps {
-  children: ReactNode; // Button text or content
-  size?: "sm" | "md"; // Button size
-  variant?: "primary" | "outline"; // Button variant
-  startIcon?: ReactNode; // Icon before the text
-  endIcon?: ReactNode; // Icon after the text
-  onClick?: () => void; // Click handler
-  disabled?: boolean; // Disabled state
-  className?: string; // Disabled state
+  children: ReactNode;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'outline';
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+  colorScheme?: 'brand' | 'error' | 'warning' | 'success' | 'gray' | 'blue-light';
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  size = "md",
-  variant = "primary",
+  size = 'md',
+  variant = 'primary',
   startIcon,
   endIcon,
   onClick,
-  className = "",
+  className = '',
   disabled = false,
+  colorScheme = 'brand',
 }) => {
-  // Size Classes
   const sizeClasses = {
-    sm: "px-3.5 py-2 text-xs",
-    md: "px-5 py-3.5 text-sm",
+    sm: 'px-3.5 py-2 text-xs',
+    md: 'px-4 py-2.5 text-sm',
+    lg: 'px-5 py-3.5 text-sm',
   };
 
-  // Variant Classes
   const variantClasses = {
-    primary:
-      "bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300",
-    outline:
-      "bg-white text-brand-500 ring-1 ring-inset ring-brand-500 hover:bg-brand-500 hover:text-white dark:bg-gray-800 hover:dark:bg-brand-500 dark:text-brand-400 dark:ring-brand-300 dark:hover:bg-white/[0.03] dark:hover:text-white",
+    primary: `
+      bg-${colorScheme}-500 
+      text-white 
+      shadow-theme-xs 
+      hover:bg-${colorScheme}-600
+      active:scale-95
+      disabled:bg-${colorScheme}-300
+    `,
+    outline: `
+      bg-transparent
+      text-${colorScheme}-500
+      ring-1 ring-inset ring-${colorScheme}-500
+      hover:bg-white/90 
+      dark:hover:bg-transparent
+      dark:hover:text-white
+      active:scale-95
+    `,
   };
+
+  const safeVariantClass = variantClasses[variant].replace(/\$\{colorScheme\}/g, colorScheme);
 
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg transition ${className} ${
-        sizeClasses[size]
-      } ${variantClasses[variant]} ${
-        disabled ? "cursor-not-allowed opacity-50" : ""
-      }`}
+      className={`
+        inline-flex items-center justify-center gap-2 rounded-lg 
+        transition-all duration-150 ease-in-out 
+        focus:outline-none 
+        ${className} 
+        ${sizeClasses[size]} 
+        ${safeVariantClass} 
+        ${disabled ? 'cursor-not-allowed opacity-50' : ''}
+      `}
       onClick={onClick}
       disabled={disabled}
     >

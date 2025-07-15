@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import PageBreadcrumb from '../../components/common/PageBreadCrumb';
 import Form from '../../components/form/Form';
 import Button from '../../components/ui/button/Button';
+import { Modal } from '../../components/ui/modal';
 import {
   Table,
   TableBody,
@@ -8,9 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from '../../components/ui/table';
-import { PlusIcon, TrashBinIcon } from '../../icons';
+import { PlusIcon, TrashBinIcon, UserCircleIcon } from '../../icons';
+import Input from '../../components/form/input/InputField';
+import Label from '../../components/form/Label';
+import { ConfirmationModal } from '../../components/ui/modal/ConfirmationModal';
+import Checkbox from '../../components/form/input/Checkbox';
 
 const Roles = () => {
+  const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
+  const [isOpenModalAccess, setIsOpenModalAccess] = useState<boolean>(false);
+  const [isOpenConfirmModal, setIsOpenConfirmModal] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
+
   return (
     <>
       <PageBreadcrumb pageTitle="Role" baseSection="System" />
@@ -48,49 +59,43 @@ const Roles = () => {
                 />
               </div>
             </Form>
-            <Button size="sm" variant="outline">
+            <Button size="sm" onClick={() => setIsOpenModalAdd(true)}>
               <PlusIcon /> Tambah data
             </Button>
           </div>
 
-          <hr />
+          <hr/>
 
           <Table>
             <TableHeader>
               <TableRow>
-                <TableCell isHeader={true}>
-                  No.
-                </TableCell>
-                <TableCell isHeader={true}>
-                  Nama Role
-                </TableCell>
-                <TableCell isHeader={true}>
-                  Deskripsi Role
-                </TableCell>
-                <TableCell isHeader={true}>
-                  Hak Akses
-                </TableCell>
-                <TableCell isHeader={true}>
-                  Aksi
-                </TableCell>
+                <TableCell isHeader={true}>No.</TableCell>
+                <TableCell isHeader={true}>Nama Role</TableCell>
+                <TableCell isHeader={true}>Deskripsi Role</TableCell>
+                <TableCell isHeader={true}>Hak Akses</TableCell>
+                <TableCell isHeader={true}>Aksi</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
+                <TableCell>1</TableCell>
+                <TableCell>Super Admin</TableCell>
+                <TableCell>Superman admin</TableCell>
                 <TableCell>
-                  1
+                  <Button
+                    colorScheme="warning"
+                    size="sm"
+                    onClick={() => setIsOpenModalAccess(true)}
+                  >
+                    <UserCircleIcon />
+                  </Button>
                 </TableCell>
                 <TableCell>
-                  Super Admin
-                </TableCell>
-                <TableCell>
-                  Superman admin
-                </TableCell>
-                <TableCell>
-                  Banyak sekali
-                </TableCell>
-                <TableCell>
-                  <Button size='sm' onClick={() => {}} className='bg-red-500 text-white hover:bg-red-600'>
+                  <Button
+                    colorScheme="error"
+                    size="sm"
+                    onClick={() => setIsOpenConfirmModal(true)}
+                  >
                     <TrashBinIcon />
                   </Button>
                 </TableCell>
@@ -99,6 +104,88 @@ const Roles = () => {
           </Table>
         </div>
       </div>
+
+      {/* Modal add */}
+      <Modal isOpen={isOpenModalAdd} onClose={() => setIsOpenModalAdd(false)}>
+        <h1 className="mb-5 text-2xl font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+          Tambah Role
+        </h1>
+
+        <Form onSubmit={() => {}}>
+          <div className="grid gap-4">
+            <div>
+              <Label htmlFor="name">Nama Role</Label>
+              <Input type="text" id="name" placeholder="Nama Role" />
+            </div>
+            <div>
+              <Label htmlFor="name">Deskripsi Role</Label>
+              <Input type="text" id="name" placeholder="Deskripsi Role" />
+            </div>
+            <div className="flex flex-row w-full justify-end gap-3 mt-5">
+              <Button size="md" colorScheme="success">
+                Submit
+              </Button>
+              <Button
+                size="md"
+                colorScheme="gray"
+                onClick={() => setIsOpenModalAdd(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Form>
+      </Modal>
+
+      {/* Modal Access */}
+      <Modal
+        isOpen={isOpenModalAccess}
+        onClose={() => setIsOpenModalAccess(false)}
+      >
+        <h1 className="mb-5 text-2xl font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+          Ubah Role Access: Super Admin
+        </h1>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell isHeader={true}>ID</TableCell>
+              <TableCell isHeader={true}>Menu</TableCell>
+              <TableCell isHeader={true}>Hak Akses</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>06</TableCell>
+              <TableCell>Beranda</TableCell>
+              <TableCell>
+                <Checkbox label='Dashboard' checked={checked} onChange={() => {setChecked(!checked)}} />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <div className="flex flex-row w-full justify-end gap-3 mt-5">
+          <Button size="md" colorScheme="success">
+            Save
+          </Button>
+          <Button
+            size="md"
+            colorScheme="gray"
+            onClick={() => setIsOpenModalAccess(false)}
+          >
+            Cancel
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        confirmTitle="Are you sure want to delete?"
+        isOpen={isOpenConfirmModal}
+        onClose={() => setIsOpenConfirmModal(false)}
+        onConfirm={() => {}}
+      />
     </>
   );
 };
