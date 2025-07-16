@@ -5,6 +5,10 @@ import Button from '../../components/ui/button/Button';
 // import SortableList from '../../components/ui/sortable/SortableList';
 import NestedSortableMenu from '../../components/ui/sortable/NestedSortableMenu';
 import { PlusIcon } from '../../icons';
+import { Modal } from '../../components/ui/modal';
+import Label from '../../components/form/Label';
+import Input from '../../components/form/input/InputField';
+import Select from '../../components/form/Select';
 
 type MenuItem = {
   id: string;
@@ -25,22 +29,7 @@ const initialData: MenuItem[] = [
 const Menu = () => {
   const [items, setItems] = useState<MenuItem[]>(initialData);
   const [draggingParentId, setDraggingParentId] = useState<string | null>(null);
-
-  // const saveToBackend = async (sortedItems: MenuItem[]) => {
-  //   // Contoh kirim ke backend
-  //   try {
-  //     const response = await fetch("/api/save-menu-order", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ menu: sortedItems }),
-  //     });
-
-  //     const result = await response.json();
-  //     console.log('✅ Saved:', 'tes');
-  //   } catch (err) {
-  //     console.error('❌ Failed to save:', err);
-  //   }
-  // };
+  const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
 
   const handleSearch = () => {};
   return (
@@ -80,7 +69,7 @@ const Menu = () => {
                 />
               </div>
             </Form>
-            <Button size="sm" variant="outline" className="">
+            <Button size="sm" onClick={() => setIsOpenModalAdd(true)}>
               <PlusIcon /> Tambah data
             </Button>
           </div>
@@ -100,6 +89,111 @@ const Menu = () => {
           />
         </div>
       </div>
+
+      {/* Modal add */}
+      <Modal isOpen={isOpenModalAdd} onClose={() => setIsOpenModalAdd(false)}>
+        <h1 className="mb-5 text-2xl font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+          Tambah Menu
+        </h1>
+
+        <Form onSubmit={() => {}}>
+          <div className="flex flex-col">
+            <div className="mb-4">
+              <Label htmlFor="parent_id" required >Parent menu</Label>
+              <Select
+                options={[
+                  {
+                    value: 'settings',
+                    label: 'Settings',
+                  },
+                ]}
+                onChange={() => {}}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name" required >Nama Menu</Label>
+                <Input type="text" id="name" />
+              </div>
+              <div>
+                <Label htmlFor="description" required >Deskripsi Menu</Label>
+                <Input type="text" id="description" />
+              </div>
+              <div>
+                <Label htmlFor="url" required >Url Menu</Label>
+                <Input type="text" id="url" placeholder="admin/..." />
+              </div>
+              <div>
+                <Label htmlFor="order" required >Urutan Menu</Label>
+                <Input type="text" id="order" />
+              </div>
+              <div>
+                <Label htmlFor="group" required >Menu Group</Label>
+                <Select
+                  options={[
+                    {
+                      value: 'main',
+                      label: 'Main',
+                    },
+                  ]}
+                  defaultValue="main"
+                  onChange={() => {}}
+                />
+              </div>
+              <div>
+                <Label htmlFor="icon">Icon Menu</Label>
+                <Input type="text" id="icon" />
+              </div>
+              <div>
+                <Label htmlFor="menu_active" required>Menu Aktif</Label>
+                <Select
+                  options={[
+                    {
+                      value: '1',
+                      label: 'Ya',
+                    },
+                    {
+                      value: '0',
+                      label: 'Tidak',
+                    },
+                  ]}
+                  defaultValue="1"
+                  onChange={() => {}}
+                />
+              </div>
+              <div>
+                <Label htmlFor="show_menu" required>Tampilkan Menu</Label>
+                <Select
+                  options={[
+                    {
+                      value: '1',
+                      label: 'Ya',
+                    },
+                    {
+                      value: '0',
+                      label: 'Tidak',
+                    },
+                  ]}
+                  defaultValue="1"
+                  onChange={() => {}}
+                />
+              </div>
+            </div>
+            <div className="flex flex-row w-full justify-end gap-3 mt-5">
+              <Button size="md" colorScheme="success">
+                Submit
+              </Button>
+              <Button
+                size="md"
+                colorScheme="gray"
+                onClick={() => setIsOpenModalAdd(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Form>
+      </Modal>
     </>
   );
 };
